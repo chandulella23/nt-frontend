@@ -1,0 +1,173 @@
+<!-- <nz-table #basicTable [nzData]="orders">
+    <thead>
+      <tr>
+        <th>Order Number</th>
+        <th>Order Due Date</th>
+        <th>Customer Name</th>
+        <th>Customer Address</th>
+        <th>Customer Phone</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of basicTable.data">
+        <td>{{order.number}}</td>
+        <td>{{order.due_date}}</td>
+        <td>{{order.customer_name}}</td>
+        <td>{{order.customer_address}}</td>
+        <td>{{order.customer_phone}}</td>
+        <td>{{order.total}}</td>
+        <td>
+            <a>Edit</a>
+          <a>Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table> -->
+
+<div class="orders_container">
+    <div class="">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2 pull-right">
+                    <a href="javascript:void(0);" class="btn btn-default " id="btnOrder" data-toggle="modal"
+                        data-target="#add-order" (click)="orderForm.reset();edit=false">Add Order</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div id="table">
+            <div id="table-datatable_wrapper" class="dataTables_wrapper no-footer">
+                <div class="premade-scroller">
+                    <div *ngIf="!loading && orders.length==0">
+                        No Orders Found...
+                    </div>
+
+                    <div *ngIf="!loading && orders.length>0">
+                        <table class="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>Order Number</th>
+                                    <th>Order Due Date</th>
+                                    <th>Customer Name</th>
+                                    <th>Customer Address</th>
+                                    <th>Customer Phone</th>
+                                    <th>Total</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody class="custom-tbody">
+                                <tr *ngFor="let order of orders;let i=index;">
+                                    <td>{{order.number}}</td>
+                                    <td>{{order.due_date}}</td>
+                                    <td>{{order.customer_name}}</td>
+                                    <td>{{order.customer_address}}</td>
+                                    <td>{{order.customer_phone}}</td>
+                                    <td>{{order.total}}</td>
+                                    <td>
+                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#add-order"
+                                            (click)="editOrder(i);">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#remove-order"
+                                            (click)="removeOrder(i)">
+                                            <i class="material-icons">delete</i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="add-order" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-bg">
+                <div class="modal-header">
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <i class="material-icons">close</i>
+                    </button>
+                    <h5 class="modal-title">Add a New Order</h5>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form id="addorderForm" [formGroup]="orderForm">
+                            <div class="form-group label-floating">
+                                <label class="control-label" for="customer_name">Customer Name</label>
+                                <input class="form-control" id="customer_name" type="text" name="customer_name"
+                                    formControlName="customer_name">
+                                <div class="er-msg"
+                                    *ngIf="orderForm.controls.customer_name.dirty && !orderForm.controls.customer_name.valid">
+                                    Please enter customer name
+                                </div>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label" for="customer_address">Customer Address</label>
+                                <input class="form-control" id="customer_address" type="text" name="customer_address"
+                                    formControlName="customer_address">
+                                <div class="er-msg"
+                                    *ngIf="orderForm.controls.customer_address.dirty && !orderForm.controls.customer_address.valid">
+                                    Please enter customer address
+                                </div>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label" for="customer_phone">Customer Phone</label>
+                                <input class="form-control" id="customer_phone" type="text" name="customer_phone"
+                                    formControlName="customer_phone">
+                                <div class="er-msg"
+                                    *ngIf="orderForm.controls.customer_phone.dirty && !orderForm.controls.customer_phone.valid">
+                                    Please enter customer phone
+                                </div>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label" for="total">Order Total</label>
+                                <input class="form-control" id="total" type="text" name="total" formControlName="total">
+                                <div class="er-msg"
+                                    *ngIf="orderForm.controls.total.dirty && !orderForm.controls.total.valid">
+                                    Please enter ordertotal
+                                </div>
+                            </div>
+                            <button *ngIf="!edit" #saveButton (click)="createOrder(orderForm.value,saveButton)"
+                                class="btn btn btn-red-outline btn-add-order btn-hover" id="createOrder"
+                                [disabled]="!orderForm.valid">Add</button>
+                            <button *ngIf="edit" #updateButton (click)="updateOrder(orderForm.value,updateButton)"
+                                class="btn btn btn-red-outline btn-add-order btn-hover" id="updateOrder"
+                                [disabled]="!orderForm.valid">Update</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-order" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content modal-bg">
+                <div class="modal-header">
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <i class="material-icons">close</i>
+                    </button>
+                    <h5 class="modal-title">Delete Order</h5>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <!--  -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

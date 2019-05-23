@@ -1,0 +1,40 @@
+<div class="ui grid" style="background: url('./../../../assets/home.jpg');height:100%;opacity:0.8;background-repeat: no-repeat;
+background-size: 100% 100%">
+  <div class="three column row">
+    <div class="column"></div>
+    <div class="column" style="margin-top:120px">
+      <h1 style="text-align: center;color:white">Sign In</h1>
+      <form class="ui form" [formGroup]="userForm">
+        <div class="field">
+          <label style="color:white;font-size: 20px">Email</label>
+          <input type="text" formControlName="email" [(ngModel)]="userDetails.email" placeholder="Email">
+          <div *ngIf="userForm.controls['email'].touched&&!userForm.controls['email'].valid">
+            <p>Enter a valid email address</p>
+          </div>
+        </div>
+        <div class="field">
+          <label style="color:white;font-size: 20px">Password</label>
+          <input type="{{inputType}}" style="float: left;width: 90%;height: 38px;" formControlName="password"
+            [(ngModel)]="userDetails.password" placeholder="Password">
+          <span (click)="tooglepwd()"
+            style="background-color:white;height: 38px;float: left;width: 10%;border-radius: 4px 4px 4px 4px"
+            toggle="#password-field"><span style="margin-top: 13px;margin-left: 10px"
+              class="fa fa-fw fa-eye field-icon toggle-password"></span></span>
+          <div *ngIf="userForm.controls['password'].touched&&!userForm.controls['password'].valid">
+            <p>Enter a valid password minmum 5 length</p>
+          </div>
+        </div>
+        <div class="field">
+          <p *ngIf="errorMessage">please enter correct email and password</p>
+        </div>
+        <div class="field">
+          <label>
+            <input type="checkbox" [(ngModel)]="rememberUser" [ngModelOptions]="{standalone: true}" /> Rember Me
+          </label>
+        </div>
+        <button class="ui button" type="submit" (click)="onSubmit()" [disabled]="!userForm.valid">Login</button>
+      </form>
+    </div>
+    <div class="column"></div>
+  </div>
+</div>
